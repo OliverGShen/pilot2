@@ -1,0 +1,13 @@
+type Pilot @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  first_name: String
+  last_name: String
+  dl_dob: String
+  dl_number: String
+  dl_exp: String
+  dl_image: String
+  profile_image: String
+  dl_verification_status: String
+  face_similarity_score: Float
+}
+ 

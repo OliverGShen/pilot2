@@ -1,0 +1,20 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-pilotverify-staging-6ef80-authRole",
+      "UnauthRoleArn": "arn:aws:iam::222634366414:role/amplify-pilotverify-staging-6ef80-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::222634366414:role/amplify-pilotverify-staging-6ef80-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-pilotverify-staging-6ef80-deployment",
+      "UnauthRoleName": "amplify-pilotverify-staging-6ef80-unauthRole",
+      "StackName": "amplify-pilotverify-staging-6ef80",
+      "StackId": "arn:aws:cloudformation:us-east-1:222634366414:stack/amplify-pilotverify-staging-6ef80/5076ea40-96cc-11ef-b58e-0e84d175f4af",
+      "AmplifyAppId": "debm42glenxq2"
+    },
+    "categories": {
+      "auth": {
+        "PilotVerify": {}
+      }
+    }
+  }
+}
