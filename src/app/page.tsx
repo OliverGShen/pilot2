@@ -16,17 +16,17 @@ export default function Page() {
             <h1>Pilot Verification Form</h1>
             {/* Render the PilotVerification component */}
             <PilotVerification
-                onSubmit={(fields: Record<string, any>) => {
-                    const updatedFields: Record<string, any> = {};
-                    Object.keys(fields).forEach((key) => {
+                onSubmit={(fields) => {
+                    // Example function to trim all string inputs
+                    const updatedFields = {}
+                    Object.keys(fields).forEach(key => {
                         if (typeof fields[key] === 'string') {
-                            updatedFields[key] = fields[key].trim();
+                            updatedFields[key] = fields[key].trim()
                         } else {
-                            updatedFields[key] = fields[key];
+                            updatedFields[key] = fields[key]
                         }
-                    });
-                    console.log("Trimmed and submitted fields:", updatedFields);
-                    return updatedFields;
+                    })
+                    return updatedFields
                 }}
             />
         </div>
