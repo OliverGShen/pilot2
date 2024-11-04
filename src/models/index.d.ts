@@ -1,5 +1,5 @@
 import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier } from "@aws-amplify/datastore";
-// @ts-expect-error
+// @ts-expect-error - Amplify override
 import { LazyLoading, LazyLoadingDisabled } from "@aws-amplify/datastore";
 
 
