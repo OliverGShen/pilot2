@@ -13,9 +13,18 @@ Amplify.configure(awsmobile);
 export default function Page() {
   return (
     <ThemeProvider theme={studioTheme}>
-      <div>
+      <div className="bg-white p-4">
         <h1>Pilot Verification Form</h1>
         <PilotVerification
+        overrides={{
+            PilotVerificationGrid: {
+              style: {
+                backgroundColor: "white",
+                padding: "20px",
+                borderRadius: "8px"
+              }
+            }
+          }}
           onSubmit={(fields: PilotVerificationInputValues): PilotVerificationInputValues => {
             const updatedFields: PilotVerificationInputValues = {
               first_name: typeof fields.first_name === 'string' ? fields.first_name.trim() : fields.first_name,
