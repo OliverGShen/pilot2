@@ -1,14 +1,16 @@
 "use client";
 
 import { ThemeProvider } from "@aws-amplify/ui-react";
-// import { Amplify } from 'aws-amplify';
+import { Amplify } from 'aws-amplify';
 import { uploadData } from 'aws-amplify/storage';
 import { useState } from 'react';
-// import awsmobile from '../aws-exports';
+import awsmobile from '../aws-exports';
 import "@aws-amplify/ui-react/styles.css";
 import { studioTheme } from "../ui-components";
 import { PilotVerification } from '../ui-components';
 import type { PilotVerificationInputValues } from '../ui-components/PilotVerification';  
+
+Amplify.configure(awsmobile);
 
 export default function Page() {
   const [uploadProgress, setUploadProgress] = useState({
