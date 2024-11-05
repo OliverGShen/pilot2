@@ -38,6 +38,7 @@ function Page() {
   const handleSuccess = async (fields: PilotVerificationInputValues) => {
     try {
       // Handle DL Image Upload
+      console.log("Starting DL image upload...");
       const dlFile = (fields.dl_image as unknown) as File;
       let dlKey = '';
       if (dlFile && 'type' in dlFile) {
@@ -51,6 +52,7 @@ function Page() {
             onProgress: ({ transferredBytes, totalBytes }) => {
               if (totalBytes) {
                 const percentUploaded = (transferredBytes / totalBytes) * 100;
+                console.log(`DL image upload progress: ${percentUploaded}%`);
                 setUploadProgress(prev => ({
                   ...prev,
                   dl: percentUploaded
@@ -58,8 +60,8 @@ function Page() {
               }
             }
           }
-        });
-      }
+        }); console.log("DL image upload completed.");
+      } else { console.error("DL file is not valid.")}
 
       // Handle Profile Image Upload
       const profileFile = (fields.profile_image as unknown) as File;
