@@ -38,6 +38,54 @@ function Page() {
   // Handle the async operations in onSuccess
   const handleSuccess = async (fields: PilotVerificationInputValues) => {
     try {
+      // Handle DL Image Upload
+      const dlFile = (fields.dl_image as unknown) as File;
+      let dlKey = '';
+      if (dlFile && 'type' in dlFile) {
+        dlKey = `dl-images/${dlFile.name}`;
+        await uploadData({
+          data: dlFile,
+          path: dlKey,
+          options: {
+            bucket: 'pilot-dl-images',
+            contentType: dlFile.type,
+            onProgress: ({ transferredBytes, totalBytes }) => {
+              if (totalBytes) {
+                const percentUploaded = (transferredBytes / totalBytes) * 100;
+                setUploadProgress(prev => ({
+                  ...prev,
+                  dl: percentUploaded
+                }));
+              }
+            }
+          }
+        });
+      }
+
+      // Handle Profile Image Upload
+      const profileFile = (fields.profile_image as unknown) as File;
+      let profileKey = '';
+      if (profileFile && 'type' in profileFile) {
+        profileKey = `profile-images/${profileFile.name}`;
+        await uploadData({
+          data: profileFile,
+          path: profileKey,
+          options: {
+            bucket: 'pilot-profile-images',
+            contentType: profileFile.type,
+            onProgress: ({ transferredBytes, totalBytes }) => {
+              if (totalBytes) {
+                const percentUploaded = (transferredBytes / totalBytes) * 100;
+                setUploadProgress(prev => ({
+                  ...prev,
+                  profile: percentUploaded
+                }));
+              }
+            }
+          }
+        });
+      }
+
       // Save to database using GraphQL
       await client.graphql({
         query: createPilot,
