@@ -7,10 +7,10 @@ const awsmobile = {
     "aws_appsync_region": "us-east-1",
     "aws_appsync_authenticationType": "API_KEY",
     "aws_appsync_apiKey": "da2-kr6rgrb2znewfnfoph2fd7ktie",
-    "aws_cognito_identity_pool_id": "us-east-1:2e23a177-966e-4b6a-8d83-9dbe6e8f7e35",
+    "aws_cognito_identity_pool_id": "us-east-1:febbbc6c-69b8-43dd-81c9-ba0058a00e7c",
     "aws_cognito_region": "us-east-1",
-    "aws_user_pools_id": "us-east-1_t1gMQ7bW6",
-    "aws_user_pools_web_client_id": "2rah87etipl4401ks2b1olatf",
+    "aws_user_pools_id": "us-east-1_LaVVGPK0t",
+    "aws_user_pools_web_client_id": "70k0cek947d58u0fajb0dpfvoe",
     "oauth": {},
     "aws_cognito_username_attributes": [
         "EMAIL"
