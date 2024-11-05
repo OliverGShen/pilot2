@@ -1,5 +1,5 @@
 import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier } from "@aws-amplify/datastore";
-// @ts-ignore
+// @ts-expect-error
 import { LazyLoading, LazyLoadingDisabled } from "@aws-amplify/datastore";
 
 export enum VerificationStatus {
