@@ -1,6 +1,6 @@
 export type AmplifyDependentResourcesAttributes = {
   "api": {
-    "PilotVerify": {
+    "pilotverify": {
       "GraphQLAPIEndpointOutput": "string",
       "GraphQLAPIIdOutput": "string",
       "GraphQLAPIKeyOutput": "string"
@@ -10,10 +10,8 @@ export type AmplifyDependentResourcesAttributes = {
     "PilotVerify": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
-      "HostedUIDomain": "string",
       "IdentityPoolId": "string",
       "IdentityPoolName": "string",
-      "OAuthMetadata": "string",
       "UserPoolArn": "string",
       "UserPoolId": "string",
       "UserPoolName": "string"

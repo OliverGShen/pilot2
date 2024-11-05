@@ -1,5 +1,11 @@
 {
-  "AppSyncApiName": "PilotVerify",
+  "AppSyncApiName": "pilotverify",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
-  "DynamoDBEnableServerSideEncryption": false
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authPilotVerify",
+      "Outputs.UserPoolId"
+    ]
+  }
 }

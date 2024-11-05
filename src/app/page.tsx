@@ -90,9 +90,9 @@ function Page() {
         query: createPilot,
         variables: {
           input: {
-            first_name: fields.first_name,
-            last_name: fields.last_name,
-            dl_number: fields.dl_number,
+            first_name: fields.first_name || '',
+            last_name: fields.last_name || '',
+            dl_number: fields.dl_number || '',
             dl_image: dlKey,
             profile_image: profileKey,
             dl_verification_status: "PENDING",

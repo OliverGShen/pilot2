@@ -45,7 +45,7 @@
     "usernameAttributes": [
       "email"
     ],
-    "useDefault": "defaultSocial",
+    "useDefault": "default",
     "userPoolGroups": false,
     "userPoolGroupList": [
       "Pilot"
@@ -68,15 +68,11 @@
     "breakCircularDependency": true,
     "dependsOn": [],
     "triggers": {},
-    "hostedUI": true,
+    "hostedUI": false,
     "parentStack": {
       "Ref": "AWS::StackId"
     },
     "permissions": [],
-    "hostedUIDomainName": "pilotverify1c904612-1c904612",
-    "authProvidersUserPool": [],
-    "hostedUIProviderMeta": "[]",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/\"],\"LogoutURLs\":[\"http://localhost:3000/\"]}",
     "authProviders": []
   }
 }

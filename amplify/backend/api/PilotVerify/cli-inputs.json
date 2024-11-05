@@ -1,26 +1,17 @@
 {
   "version": 1,
   "serviceConfiguration": {
-    "apiName": "PilotVerify",
+    "apiName": "pilotverify",
     "serviceName": "AppSync",
     "defaultAuthType": {
       "mode": "API_KEY",
-      "keyDescription": "api key description",
-      "expirationTime": 30
+      "expirationTime": 7
     },
     "additionalAuthTypes": [
-      {
-        "mode": "AWS_IAM"
-      },
       {
         "mode": "AMAZON_COGNITO_USER_POOLS",
         "cognitoUserPoolId": "authPilotVerify"
       }
-    ],
-    "conflictResolution": {
-      "defaultResolutionStrategy": {
-        "type": "NONE"
-      }
-    }
+    ]
   }
 }

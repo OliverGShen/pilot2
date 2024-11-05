@@ -1,20 +1,17 @@
-type PilotVerification @model 
+type Pilot @model
 @auth(rules: [
   { allow: private }
 ]) {
   id: ID!
-  firstName: String!
-  lastName: String!
-  driverLicenseNumber: String!
-  driverLicenseImageKey: String!
-  profileImageKey: String!
-  status: VerificationStatus!
+  first_name: String!
+  last_name: String!
+  dl_dob: String
+  dl_number: String!
+  dl_exp: String
+  dl_image: String!
+  profile_image: String!
+  dl_verification_status: String
+  face_similarity_score: Float
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
-}
-
-enum VerificationStatus {
-  PENDING
-  APPROVED
-  REJECTED
 }
