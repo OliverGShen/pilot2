@@ -16,5 +16,27 @@
         "PilotVerify": {}
       }
     }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-pilotverify-dev-a7a74-authRole",
+      "UnauthRoleArn": "arn:aws:iam::222634366414:role/amplify-pilotverify-dev-a7a74-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::222634366414:role/amplify-pilotverify-dev-a7a74-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-pilotverify-dev-a7a74-deployment",
+      "UnauthRoleName": "amplify-pilotverify-dev-a7a74-unauthRole",
+      "StackName": "amplify-pilotverify-dev-a7a74",
+      "StackId": "arn:aws:cloudformation:us-east-1:222634366414:stack/amplify-pilotverify-dev-a7a74/a81c5e40-9b38-11ef-aa25-0e29bdd92d97",
+      "AmplifyAppId": "d3kn89a6m0vauk"
+    },
+    "categories": {
+      "auth": {
+        "PilotVerify": {},
+        "userPoolGroups": {}
+      },
+      "api": {
+        "PilotVerify": {}
+      }
+    }
   }
 }

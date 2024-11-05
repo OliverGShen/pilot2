@@ -1,7 +1,7 @@
 export const schema = {
     "models": {
-        "Pilot": {
-            "name": "Pilot",
+        "PilotVerification": {
+            "name": "PilotVerification",
             "fields": {
                 "id": {
                     "name": "id",
@@ -10,66 +10,54 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "first_name": {
-                    "name": "first_name",
+                "firstName": {
+                    "name": "firstName",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
-                "last_name": {
-                    "name": "last_name",
+                "lastName": {
+                    "name": "lastName",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
-                "dl_dob": {
-                    "name": "dl_dob",
+                "driverLicenseNumber": {
+                    "name": "driverLicenseNumber",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
-                "dl_number": {
-                    "name": "dl_number",
+                "driverLicenseImageKey": {
+                    "name": "driverLicenseImageKey",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
-                "dl_exp": {
-                    "name": "dl_exp",
+                "profileImageKey": {
+                    "name": "profileImageKey",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
-                "dl_image": {
-                    "name": "dl_image",
+                "status": {
+                    "name": "status",
+                    "isArray": false,
+                    "type": {
+                        "enum": "VerificationStatus"
+                    },
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "owner": {
+                    "name": "owner",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "profile_image": {
-                    "name": "profile_image",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "dl_verification_status": {
-                    "name": "dl_verification_status",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "face_similarity_score": {
-                    "name": "face_similarity_score",
-                    "isArray": false,
-                    "type": "Float",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -77,21 +65,19 @@ export const schema = {
                     "name": "createdAt",
                     "isArray": false,
                     "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
+                    "isRequired": true,
+                    "attributes": []
                 },
                 "updatedAt": {
                     "name": "updatedAt",
                     "isArray": false,
                     "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
+                    "isRequired": true,
+                    "attributes": []
                 }
             },
             "syncable": true,
-            "pluralName": "Pilots",
+            "pluralName": "PilotVerifications",
             "attributes": [
                 {
                     "type": "model",
@@ -102,7 +88,10 @@ export const schema = {
                     "properties": {
                         "rules": [
                             {
-                                "allow": "public",
+                                "provider": "userPools",
+                                "ownerField": "owner",
+                                "allow": "owner",
+                                "identityClaim": "cognito:username",
                                 "operations": [
                                     "create",
                                     "update",
@@ -116,8 +105,17 @@ export const schema = {
             ]
         }
     },
-    "enums": {},
+    "enums": {
+        "VerificationStatus": {
+            "name": "VerificationStatus",
+            "values": [
+                "PENDING",
+                "APPROVED",
+                "REJECTED"
+            ]
+        }
+    },
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "986cfecea38db83e604819525bf996fb"
+    "version": "383b8dde95188eca617fc0569c05b879"
 };

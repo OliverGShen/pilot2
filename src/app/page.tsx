@@ -1,31 +1,50 @@
 "use client";
 
 import { ThemeProvider } from "@aws-amplify/ui-react";
+import { withAuthenticator } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
+import { generateClient } from 'aws-amplify/api'; // Add this
 import { uploadData } from 'aws-amplify/storage';
 import { useState } from 'react';
+import { createPilot } from '../graphql/mutations';
 import awsmobile from '../aws-exports';
 import "@aws-amplify/ui-react/styles.css";
 import { studioTheme } from "../ui-components";
 import { PilotVerification } from '../ui-components';
 import type { PilotVerificationInputValues } from '../ui-components/PilotVerification';  
 
-Amplify.configure(awsmobile);
 
-export default function Page() {
+Amplify.configure(awsmobile);
+const client = generateClient();
+
+function Page() {
   const [uploadProgress, setUploadProgress] = useState({
     dl: 0,
     profile: 0
   });
 
+  // This function needs to be synchronous
   const handleSubmit = (fields: PilotVerificationInputValues): PilotVerificationInputValues => {
-    // Handle Driver License Image
-    const dlFile = (fields.dl_image as unknown) as File;
-    if (dlFile && 'type' in dlFile) {
-      try {
-        uploadData({
+    return {
+      first_name: fields.first_name || '',
+      last_name: fields.last_name || '',
+      dl_number: fields.dl_number || '',
+      dl_image: fields.dl_image || '',
+      profile_image: fields.profile_image || ''
+    };
+  };
+
+  // Handle the async operations in onSuccess
+  const handleSuccess = async (fields: PilotVerificationInputValues) => {
+    try {
+      // Handle DL Image Upload
+      const dlFile = (fields.dl_image as unknown) as File;
+      let dlKey = '';
+      if (dlFile && 'type' in dlFile) {
+        dlKey = `dl-images/${dlFile.name}`;
+        await uploadData({
           data: dlFile,
-          path: `dl-images/${dlFile.name}`,
+          path: dlKey,
           options: {
             bucket: 'pilot-dl-images',
             contentType: dlFile.type,
@@ -40,18 +59,16 @@ export default function Page() {
             }
           }
         });
-      } catch (error) {
-        console.error('DL upload error:', error);
       }
-    }
-  
-    // Handle Profile Image
-    const profileFile = (fields.profile_image as unknown) as File;
-    if (profileFile && 'type' in profileFile) {
-      try {
-        uploadData({
+
+      // Handle Profile Image Upload
+      const profileFile = (fields.profile_image as unknown) as File;
+      let profileKey = '';
+      if (profileFile && 'type' in profileFile) {
+        profileKey = `profile-images/${profileFile.name}`;
+        await uploadData({
           data: profileFile,
-          path: `profile-images/${profileFile.name}`,
+          path: profileKey,
           options: {
             bucket: 'pilot-profile-images',
             contentType: profileFile.type,
@@ -66,20 +83,31 @@ export default function Page() {
             }
           }
         });
-      } catch (error) {
-        console.error('Profile upload error:', error);
       }
-    }
 
-    // Return the fields
-    return {
-      first_name: fields.first_name || '',
-      last_name: fields.last_name || '',
-      dl_number: fields.dl_number || '',
-      dl_image: dlFile && 'name' in dlFile ? dlFile.name : '',
-      profile_image: profileFile && 'name' in profileFile ? profileFile.name : ''
-    };
+      // Save to database using GraphQL
+      await client.graphql({
+        query: createPilot,
+        variables: {
+          input: {
+            first_name: fields.first_name,
+            last_name: fields.last_name,
+            dl_number: fields.dl_number,
+            dl_image: dlKey,
+            profile_image: profileKey,
+            dl_verification_status: "PENDING",
+            face_similarity_score: 0
+          }
+        }
+      });
+
+      console.log('Form submitted successfully:', fields);
+    } catch (error) {
+      console.error('Error during submission:', error);
+      setUploadProgress({ dl: 0, profile: 0 });
+    }
   };
+
 
   return (
     <ThemeProvider theme={studioTheme}>
@@ -122,9 +150,7 @@ export default function Page() {
             }
           }}
           onSubmit={handleSubmit}
-          onSuccess={(fields) => {
-            console.log('Form submitted successfully:', fields);
-          }}
+          onSuccess={handleSuccess}
           onError={(error) => {
             console.error('Form Error:', error);
             setUploadProgress({ dl: 0, profile: 0 });
@@ -160,3 +186,6 @@ export default function Page() {
     </ThemeProvider>
   );
 }
+
+// Wrap the page with authentication
+export default withAuthenticator(Page);
