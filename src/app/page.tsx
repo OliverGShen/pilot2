@@ -3,16 +3,15 @@
 import { ThemeProvider } from "@aws-amplify/ui-react";
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
-import { generateClient } from 'aws-amplify/api'; // Add this
-import { uploadData } from 'aws-amplify/storage';
+import { generateClient } from 'aws-amplify/api';
 import { useState } from 'react';
 import { createPilot } from '../graphql/mutations';
 import awsmobile from '../aws-exports';
 import "@aws-amplify/ui-react/styles.css";
 import { studioTheme } from "../ui-components";
 import { PilotVerification } from '../ui-components';
-import type { PilotVerificationInputValues } from '../ui-components/PilotVerification';  
-
+import type { PilotVerificationInputValues } from '../ui-components/PilotVerification';
+import { FileUploader } from '@aws-amplify/ui-react-storage';
 
 Amplify.configure(awsmobile);
 const client = generateClient();
@@ -22,6 +21,8 @@ function Page() {
     dl: 0,
     profile: 0
   });
+  const [dlKey, setDLKey] = useState('');
+  const [profileKey, setProfileKey] = useState('');
 
   // This function needs to be synchronous
   const handleSubmit = (fields: PilotVerificationInputValues): PilotVerificationInputValues => {
@@ -29,62 +30,14 @@ function Page() {
       first_name: fields.first_name || '',
       last_name: fields.last_name || '',
       dl_number: fields.dl_number || '',
-      dl_image: fields.dl_image || '',
-      profile_image: fields.profile_image || ''
+      dl_image: dlKey,
+      profile_image: profileKey
     };
   };
 
   // Handle the async operations in onSuccess
   const handleSuccess = async (fields: PilotVerificationInputValues) => {
     try {
-      // Handle DL Image Upload
-      const dlFile = (fields.dl_image as unknown) as File;
-      let dlKey = '';
-      if (dlFile && 'type' in dlFile) {
-        dlKey = `dl-images/${dlFile.name}`;
-        await uploadData({
-          data: dlFile,
-          path: dlKey,
-          options: {
-            bucket: 'pilot-dl-images',
-            contentType: dlFile.type,
-            onProgress: ({ transferredBytes, totalBytes }) => {
-              if (totalBytes) {
-                const percentUploaded = (transferredBytes / totalBytes) * 100;
-                setUploadProgress(prev => ({
-                  ...prev,
-                  dl: percentUploaded
-                }));
-              }
-            }
-          }
-        });
-      }
-
-      // Handle Profile Image Upload
-      const profileFile = (fields.profile_image as unknown) as File;
-      let profileKey = '';
-      if (profileFile && 'type' in profileFile) {
-        profileKey = `profile-images/${profileFile.name}`;
-        await uploadData({
-          data: profileFile,
-          path: profileKey,
-          options: {
-            bucket: 'pilot-profile-images',
-            contentType: profileFile.type,
-            onProgress: ({ transferredBytes, totalBytes }) => {
-              if (totalBytes) {
-                const percentUploaded = (transferredBytes / totalBytes) * 100;
-                setUploadProgress(prev => ({
-                  ...prev,
-                  profile: percentUploaded
-                }));
-              }
-            }
-          }
-        });
-      }
-
       // Save to database using GraphQL
       await client.graphql({
         query: createPilot,
@@ -108,7 +61,6 @@ function Page() {
     }
   };
 
-
   return (
     <ThemeProvider theme={studioTheme}>
       <div className="bg-white p-4">
@@ -121,32 +73,6 @@ function Page() {
                 padding: "20px",
                 borderRadius: "8px"
               }
-            },
-            dl_image: {
-              displayText: {
-                getFilesUploadedText: (count: number) => `${count} Driver License uploaded`,
-                getSelectedFilesText: (count: number) => `${count} Driver License selected`,
-                getRemainingFilesText: (count: number) => `${count} file remaining`,
-                getFileSizeErrorText: (size: string) => `File size must be less than ${size}`,
-                getPausedText: (percent: number) => `Upload paused at ${percent}%`
-              },
-              isResumable: true,
-              maxFileCount: 1,
-              acceptedFileTypes: ['image/*'],
-              accessLevel: 'private'
-            },
-            profile_image: {
-              displayText: {
-                getFilesUploadedText: (count: number) => `${count} Profile Photo uploaded`,
-                getSelectedFilesText: (count: number) => `${count} Profile Photo selected`,
-                getRemainingFilesText: (count: number) => `${count} file remaining`,
-                getFileSizeErrorText: (size: string) => `File size must be less than ${size}`,
-                getPausedText: (percent: number) => `Upload paused at ${percent}%`
-              },
-              isResumable: true,
-              maxFileCount: 1,
-              acceptedFileTypes: ['image/*'],
-              accessLevel: 'private'
             }
           }}
           onSubmit={handleSubmit}
@@ -157,6 +83,32 @@ function Page() {
           }}
         />
         
+        {/* File Uploader for DL Image */}
+        <FileUploader
+          acceptedFileTypes={['image/jpg', 'image/jpeg', 'image/png']}
+          path={({ identityId }) => `dl-images/${identityId}/`}
+          maxFileCount={1}
+          isResumable
+          onUploadStart={() => setUploadProgress(prev => ({ ...prev, dl: 0 }))}
+          onUploadSuccess={({ key }) => {
+            setDLKey(key || '');
+            setUploadProgress(prev => ({ ...prev, dl: 100 })); // Set to 100% on success
+          }}
+        />
+        
+        {/* File Uploader for Profile Image */}
+        <FileUploader
+          acceptedFileTypes={['image/jpg', 'image/jpeg', 'image/png']}
+          path={({ identityId }) => `profile-images/${identityId}/`}
+          maxFileCount={1}
+          isResumable
+          onUploadStart={() => setUploadProgress(prev => ({ ...prev, profile: 0 }))}
+          onUploadSuccess={({ key }) => {
+            setProfileKey(key || '');
+            setUploadProgress(prev => ({ ...prev, profile: 100 })); // Set to 100% on success
+          }}
+        />
+
         {/* Progress indicators */}
         <div className="mt-4 space-y-2">
           {uploadProgress.dl > 0 && uploadProgress.dl < 100 && (
